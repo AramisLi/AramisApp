@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_file_split"
+        android:layout_width="320dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="文件分割"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btn_file_merge"
+        android:layout_width="320dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="文件合并"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btn_file_copy"
+        android:layout_width="320dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="文件复制"
+        android:textColor="#fff" />
+</LinearLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".NdkShowListActivity">
+
+    <TextView
+        android:id="@+id/text_jni_result"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:padding="15dp"
+        android:text="reuslt:" />
+
+    <Button
+        android:id="@+id/btn_load_c"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="JNI-C"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btn_load_cpp"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="JNI-CPP"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btn_load_crypt"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="加密"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/btn_load_decrypt"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="解密"
+        android:textColor="#fff" />
+    <Button
+        android:id="@+id/btn_load_byte"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="GetByteArray"
+        android:textColor="#fff" />
+    <Button
+        android:id="@+id/btn_load_exception"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="测试异常"
+        android:textColor="#fff" />
+
+
+</LinearLayout>
