@@ -36,4 +36,5 @@ dependencies {
     implementation project(':aramis-this-base')
     implementation project(':aramisbaselibrary')
     implementation project(':aramis-ndk-cmake')
+    implementation files('src/main/jniLibs/BaiduLBS_Android.jar')
 }

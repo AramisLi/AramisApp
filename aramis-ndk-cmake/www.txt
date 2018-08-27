@@ -2,3 +2,33 @@
 我是大帅哥我是大帅哥我是大帅哥我是大帅哥
 我是大帅哥我是大帅哥
 我是大帅哥
+
+#add_subdirectory(bzip)
+#add_subdirectory(bsdiff)
+
+#add_library(ara-bsdiff
+#             SHARED)
+
+#target_link_libraries(ara-bsdiff bzip bsdiff)
+
+add_library(
+            bsdiff
+            SHARED
+            src/main/cpp/bsdiff-4.3/bsdiff.c
+            src/main/cpp/bsdiff-4.3/bspatch.c
+            src/main/cpp/bzip2-1.0.6/blocksort.c
+            src/main/cpp/bzip2-1.0.6/bzip2.c
+            src/main/cpp/bzip2-1.0.6/bzip2recover.c
+            src/main/cpp/bzip2-1.0.6/bzlib.c
+            src/main/cpp/bzip2-1.0.6/bzlib.h
+            src/main/cpp/bzip2-1.0.6/bzlib_private.h
+            src/main/cpp/bzip2-1.0.6/compress.c
+            src/main/cpp/bzip2-1.0.6/crctable.c
+            src/main/cpp/bzip2-1.0.6/decompress.c
+            src/main/cpp/bzip2-1.0.6/dlltest.c
+            src/main/cpp/bzip2-1.0.6/huffman.c
+            src/main/cpp/bzip2-1.0.6/mk251.c
+            src/main/cpp/bzip2-1.0.6/randtable.c
+            src/main/cpp/bzip2-1.0.6/spewG.c
+            src/main/cpp/bzip2-1.0.6/unzcrash.c
+)

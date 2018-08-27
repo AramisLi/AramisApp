@@ -17,4 +17,5 @@ public class AraFileSplitUtil {
     public native static void fileMerge(String newFileName, String[] paths);
 
     public native static void fileCopy(String filePath,String copyFilePath);
+
 }

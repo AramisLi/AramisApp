@@ -11,7 +11,7 @@
 #define LOGE(FORMAT, ...) __android_log_print(ANDROID_LOG_ERROR,"Aramis",FORMAT,__VA_ARGS__);
 
 JNIEXPORT jstring JNICALL
-Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_helloJNI(JNIEnv *env, jclass type) {
+Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_helloJNI(JNIEnv *env, jobject type) {
 
 
     LOGE("我是大帅哥%d", 1);
@@ -31,7 +31,7 @@ long getFileSize(char *file_path) {
 
 //文件分割
 JNIEXPORT jint JNICALL
-Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileSplit(JNIEnv *env, jclass type,
+Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileSplit(JNIEnv *env, jobject type,
                                                                  jstring filePath_, jint split) {
     const char *filePath = (*env)->GetStringUTFChars(env, filePath_, 0);
     char *a_filePath = malloc(sizeof(char) * strlen(filePath));
@@ -98,7 +98,7 @@ Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileSplit(JNIEnv *env, jc
 
 //文件合并
 JNIEXPORT void JNICALL
-Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileMerge(JNIEnv *env, jclass type,
+Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileMerge(JNIEnv *env, jobject type,
                                                                  jstring newFileName_,
                                                                  jobjectArray paths) {
     const char *newFileName = (*env)->GetStringUTFChars(env, newFileName_, 0);
@@ -131,7 +131,7 @@ Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileMerge(JNIEnv *env, jc
 }
 
 JNIEXPORT void JNICALL
-Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileCopy(JNIEnv *env, jclass type,
+Java_hello_com_aramis_ndk_cmake_utils_AraFileSplitUtil_fileCopy(JNIEnv *env, jobject type,
                                                                 jstring filePath_,
                                                                 jstring copyFilePath_) {
     const char *filePath = (*env)->GetStringUTFChars(env, filePath_, 0);

@@ -31,4 +31,20 @@
         android:background="@drawable/bg_btn_normal"
         android:text="文件复制"
         android:textColor="#fff" />
+    <Button
+        android:id="@+id/btn_file_bsdiff"
+        android:layout_width="320dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="文件差分"
+        android:textColor="#fff" />
+    <Button
+        android:id="@+id/btn_file_bspatch"
+        android:layout_width="320dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:text="文件差分合并"
+        android:textColor="#fff" />
 </LinearLayout>
