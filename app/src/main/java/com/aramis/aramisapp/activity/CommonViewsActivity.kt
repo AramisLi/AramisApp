@@ -16,6 +16,13 @@ class CommonViewsActivity : AraBaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_common_clock)
         initView()
+        setListener()
+    }
+
+    private fun setListener() {
+        btn_start.setOnClickListener {
+            ferrisView.startAnim()
+        }
     }
 
     private fun initView() {

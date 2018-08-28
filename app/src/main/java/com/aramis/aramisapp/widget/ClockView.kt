@@ -138,7 +138,7 @@ class ClockView : View {
         for (i in 0 until 12) {
             val angle = 30.0 * i
 
-            val length = if (i % 4 == 0) scale_length_long else scale_length_short
+            val length = if (i % 3 == 0) scale_length_long else scale_length_short
 
             val pointAc = width / 2f - divider
             val pointAx = width / 2f + pointAc * sin(Math.toRadians(angle)).toFloat()

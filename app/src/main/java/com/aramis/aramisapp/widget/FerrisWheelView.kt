@@ -2,17 +2,18 @@ package com.aramis.aramisapp.widget
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
-import com.aramis.library.extentions.logE
 import com.aramis.library.utils.AramisViewHelper
 import org.jetbrains.anko.dip
-import java.util.*
 import kotlin.math.cos
+import kotlin.math.min
 import kotlin.math.sin
-import kotlin.math.tan
 
 /**
  *Created by Aramis
@@ -35,14 +36,26 @@ class FerrisWheelView : View {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val scalePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var scale_length_long = dip(8)
-    private var scale_length_short = dip(5)
-    private var divider = dip(4)
+    //辐条数量
+    private var spokeCount = 18
+    //筐数量
+    private var basketCount = 6
+    private val spokeRadian = Math.toRadians(360.0 / spokeCount)
+    private val basketRadian = Math.toRadians(360.0 / basketCount)
 
-    private var secondAngle = 0.0
-    private var minuteAngle = 0.0
-    private var hourAngle = 0.0
+    //动画偏移量
+    private var offsetAngle = 0.0
+    //摩天轮圆心坐标
+    private var cx = 0f
+    private var cy = 0f
+    //摩天轮半径
+    private var r = 0f
+    private var rInner = 0f
 
+    private val path1 = Path()
+    private val path2 = Path()
+    private val pathBasket = Path()
+    private val pathBasket2 = Path()
 
     private fun init(attrs: AttributeSet?, defStyleAttr: Int) {
 
@@ -53,106 +66,167 @@ class FerrisWheelView : View {
 
         scalePaint.color = 0xffff0000.toInt()
 
-        val calendar = Calendar.getInstance()
-        calendar.time = Date(System.currentTimeMillis())
-        hourAngle = calendar.get(Calendar.HOUR) * 30.0
-        minuteAngle = calendar.get(Calendar.MINUTE) * 6.0
-        secondAngle = calendar.get(Calendar.SECOND) * 6.0
-//        val a=calendar.get(Calendar.MINUTE)/12 as Int
-        for (i in 0 until calendar.get(Calendar.MINUTE) / 12) {
-            hourAngle++
-        }
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        cx = width / 2f
+        cy = height / 2f - dip(30)
+
+        r = min(cx, cy) - paint.strokeWidth / 2 - 10
+        rInner = r - dip(20)
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        val cx = width / 2f
-        val cy = width / 2f
 
         //背景圆环
-        canvas?.drawCircle(width / 2f, width / 2f, width / 2f - paint.strokeWidth / 2, paint)
+        drawBackground(canvas)
 
-        //五角星
-//        drawPentacle(canvas, cx, cy, dip(80).toFloat())
+        //辐条
+        drawSpoke(canvas)
 
-        paint.strokeWidth = 2f
-        paint.style=Paint.Style.FILL
-        AramisViewHelper.drawPentacle(canvas,cx,cy,dip(80).toFloat(),paint)
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = dip(5).toFloat()
-    }
+        //筐
+        paint.strokeWidth = dip(3).toFloat()
+        canvas?.drawCircle(cx, cy, r / 3, paint)
+        paint.strokeWidth = 4f
+        canvas?.drawCircle(cx, cy, r / 4, paint)
+        canvas?.drawCircle(cx, cy, r / 4 - 10, paint)
 
-    private fun drawPentacle(canvas: Canvas?, cx: Float, cy: Float, r: Float) {
-        val radians18 = Math.toRadians(18.0)
-        val radians54 = Math.toRadians(54.0)
-        val radians36 = Math.toRadians(36.0)
-        val pointA = PointF(cx, cy - r)
-        val pointB = PointF(cx + r * cos(radians18).toFloat(), cy - r * sin(radians18).toFloat())
-        val pointC = PointF(cx + r * cos(radians54).toFloat(), cy + r * sin(radians54).toFloat())
-        val pointD = PointF(cx - r * cos(radians54).toFloat(), cy + r * sin(radians54).toFloat())
-        val pointE = PointF(cx - r * cos(radians18).toFloat(), cy - r * sin(radians18).toFloat())
-
-        val pointF = PointF((cx + (r - r * sin(radians18)) * tan(radians18)).toFloat(),
-                (cy - r * sin(radians18)).toFloat())
-        val pointJ = PointF((cx - (r - r * sin(radians18)) * tan(radians18)).toFloat(),
-                (cy - r * sin(radians18)).toFloat())
-
-        val pointG = PointF((cx + r * cos(radians18) - (r - r * sin(radians18)) * cos(radians36) / cos(radians18)).toFloat(),
-                (cy - r + (r - r * sin(radians18)) + (r - r * sin(radians18)) * sin(radians36) / cos(radians18)).toFloat())
-        val pointI = PointF((cx - (r * cos(radians18) - (r - r * sin(radians18)) * cos(radians36) / cos(radians18))).toFloat(),
-                (cy - r + (r - r * sin(radians18)) + (r - r * sin(radians18)) * sin(radians36) / cos(radians18)).toFloat())
-
-        val pointH = PointF(cx,
-                (cy + r * cos(radians18) * tan(radians36) - r * sin(radians18)).toFloat())
-
-        paint.strokeWidth = 2f
-        val path = Path()
-        arrayOf(pointA, pointF, pointB, pointG, pointC, pointH, pointD, pointI, pointE, pointJ).forEachIndexed { index, p ->
-            if (index == 0) {
-
-            }
-            when (index) {
-                0 -> path.moveTo(p.x, p.y)
-                else -> path.lineTo(p.x, p.y)
-            }
+        paint.color = 0xffff9988.toInt()
+        paint.style = Paint.Style.FILL
+        for (i in 0 until basketCount) {
+            val a = basketRadian * i
+            val ax = (cx + r * sin(a + offsetAngle)).toFloat()
+            val ay = (cy - r * cos(a + offsetAngle)).toFloat()
+            canvas?.drawCircle(ax, ay, 10f, paint)
+            drawBasket(canvas, ax, ay, paint)
         }
-        path.close()
-        paint.style=Paint.Style.FILL
-        canvas?.drawPath(path, paint)
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = dip(5).toFloat()
+
+        //底座
+        drawPedestal(canvas, cx, cy)
     }
 
-    private fun drawLine(canvas: Canvas?, a: PointF, b: PointF) {
-        canvas?.drawLine(a.x, a.y, b.x, b.y, paint)
+    private fun drawSpoke(canvas: Canvas?) {
+        paint.strokeWidth = 4f
+        for (i in 0 until spokeCount) {
+            val a = spokeRadian * i
+            val ax = (cx + rInner * sin(a + offsetAngle)).toFloat()
+            val ay = (cy - rInner * cos(a + offsetAngle)).toFloat()
+            canvas?.drawLine(cx, cy, ax, ay, paint)
+            val bx = cx + r * sin(a + spokeRadian / 2 + offsetAngle).toFloat()
+            val by = cy - r * cos(a + spokeRadian / 2 + offsetAngle).toFloat()
+            canvas?.drawLine(ax, ay, bx, by, paint)
+            val cxt = cx + r * sin(a - spokeRadian / 2 + offsetAngle).toFloat()
+            val cyt = cy - r * cos(a - spokeRadian / 2 + offsetAngle).toFloat()
+            canvas?.drawLine(ax, ay, cxt, cyt, paint)
+        }
+    }
+
+    private fun drawBasket(canvas: Canvas?, cx: Float, cy: Float, paint: Paint) {
+        val w = 110
+        val h = 50
+        val w2 = w / 2
+        val round = 12
+        pathBasket.reset()
+        pathBasket.moveTo(cx, cy)
+        pathBasket.lineTo(cx - w2 + round, cy)
+        pathBasket.cubicTo(cx - w2 + round, cy,cx - w2,cy, cx - w2, cy + round)
+        pathBasket.lineTo(cx - w2, cy + h)
+
+        pathBasket.lineTo(cx - w2 + round, cy + h)
+        pathBasket.lineTo(cx - w2 + round, cy + round*2)
+        pathBasket.cubicTo(cx - w2 + round, cy + round*2,cx - w2 + round, cy + round,cx - w2 + round*2, cy + round)
+
+        pathBasket.lineTo(cx + w2 - round*2, cy + round)
+        pathBasket.cubicTo(cx + w2 - round*2, cy + round,cx + w2 - round, cy + round,cx + w2 - round, cy + round*2)
+        pathBasket.lineTo(cx + w2 - round, cy + h)
+
+        pathBasket.lineTo(cx + w2, cy + h)
+        pathBasket.lineTo(cx + w2, cy)
+        pathBasket.cubicTo(cx + w2,cy+round,cx + w2,cy,cx + w2-round,cy)
+
+//        pathBasket.lineTo(cx + w2, cy + h)
+//        pathBasket.lineTo(cx + w2, cy)
+        pathBasket.close()
+        canvas?.drawPath(pathBasket, paint)
+
+        paint.color=0xff000000.toInt()
+        canvas?.drawRect(cx - w2, cy + h, cx + w2, cy + h + 20, paint)
+        paint.color = 0xffff9988.toInt()
+//        canvas?.drawRect(cx - w2, cy + h+20, cx + w2, cy + h + 60, paint)
+        pathBasket2.reset()
+        pathBasket2.moveTo(cx - w2,cy + h+20)
+        pathBasket2.lineTo(cx - w2,cy + h+20-round)
+        pathBasket2.cubicTo(cx - w2,cy + h+60-round,cx - w2,cy + h+60,cx - w2+round,cy + h+60)
+        pathBasket2.lineTo(cx + w2-round,cy + h+60)
+        pathBasket2.cubicTo(cx + w2-round,cy + h+60,cx + w2,cy + h+60,cx + w2,cy + h+60-round)
+        pathBasket2.lineTo(cx + w2,cy+ h+20)
+        pathBasket2.close()
+        canvas?.drawPath(pathBasket2, paint)
+    }
+
+    private fun drawPedestal(canvas: Canvas?, cx: Float, cy: Float) {
+        paint.color = 0xfff98327.toInt()
+        paint.style = Paint.Style.FILL
+
+        val w = 10
+        val l = 300
+        val h = height.toFloat() - 35
+
+        path1.moveTo(cx - w, cy)
+        path1.lineTo(cx - l, h)
+        path1.lineTo(cx - l + w * 2, h)
+        path1.lineTo(cx + w, cy)
+        path1.close()
+
+        path2.moveTo(cx + w, cy)
+        path2.lineTo(cx + l, h)
+        path2.lineTo(cx + l - w * 2, h)
+        path2.lineTo(cx - w, cy)
+        path2.close()
+
+        canvas?.drawPath(path1, paint)
+        canvas?.drawPath(path2, paint)
+
+        canvas?.drawRoundRect(cx - l - 50, h - 40, cx + l + 50, h, 10f, 10f, paint)
+        canvas?.drawCircle(cx, cy, 50f, paint)
+
+        paint.color = 0xffaaddcc.toInt()
+        canvas?.drawCircle(cx, cy, 40f, paint)
+        paint.color = 0xff000000.toInt()
+        path1.reset()
+        path2.reset()
+        //五角星
+        AramisViewHelper.drawPentacle(canvas, cx, cy, 30f, paint, true)
+    }
+
+    private fun drawBackground(canvas: Canvas?) {
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = dip(5).toFloat()
+        paint.color = 0xff000000.toInt()
+
+        canvas?.drawCircle(cx, cy, r, paint)
+        paint.strokeWidth = 10f
+        canvas?.drawCircle(cx, cy, rInner, paint)
     }
 
 
     fun startAnim() {
-        var temp = 0
-        val anim = ValueAnimator.ofInt(0, 59)
+        val rect = Rect()
+        rect.set((cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt())
+        val anim = ValueAnimator.ofFloat(0f, 1f)
         anim.addUpdateListener {
-            if (temp != it.animatedValue) {
-                temp = it.animatedValue as Int
-                secondAngle += 6
-
-                if (secondAngle != 0.0 && secondAngle % 360 == 0.0) {
-                    minuteAngle += 6
-                    if (minuteAngle % 12 == 0.0) {
-                        hourAngle++
-                    }
-                    if (minuteAngle >= 360) {
-                        minuteAngle = 0.0
-                    }
-                }
-                invalidate()
-            }
+            val value = it.animatedValue as Float
+            offsetAngle = 360.0 * value
+            invalidate()
         }
 
-        anim.duration = 60 * 1000
+        anim.duration = 450 * 1000
         anim.repeatCount = ValueAnimator.INFINITE
         anim.repeatMode = ValueAnimator.RESTART
         anim.interpolator = LinearInterpolator()
         anim.start()
+
     }
 }

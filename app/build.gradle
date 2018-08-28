@@ -8,7 +8,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.aramis.aramisapp"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -37,4 +37,6 @@ dependencies {
     implementation project(':aramisbaselibrary')
     implementation project(':aramis-ndk-cmake')
     implementation files('src/main/jniLibs/BaiduLBS_Android.jar')
+
+    implementation 'ru.github.igla:ferriswheel:1.2'
 }
