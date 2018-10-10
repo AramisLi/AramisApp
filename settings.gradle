@@ -1,1 +1,1 @@
-include ':app', ':aramis-kotlin-crawler',':aramisbaselibrary', ':aramis-ndk', ':aramis-this-base', ':aramis-ndk-cmake'
+include ':app', ':aramis-kotlin-crawler',':aramisbaselibrary', ':aramis-ndk', ':aramis-this-base', ':aramis-ndk-cmake', ':aramis-react-native'

@@ -38,6 +38,8 @@
 
         <activity android:name=".activity.BaiDuMapActivity"/>
         <activity android:name=".activity.CommonViewsActivity"/>
+        <activity android:name=".game.sudoku.SudokuActivity"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

@@ -4,7 +4,11 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.PointF
+import org.w3c.dom.Text
 import kotlin.math.*
+import android.opengl.ETC1.getHeight
+import android.graphics.Paint.FontMetricsInt
+
 
 /**
  *Created by Aramis
@@ -136,10 +140,52 @@ object AramisViewHelper {
         return atan(b / a)
     }
 
+    /**
+     * 任意直线与圆的交点坐标
+     * @param cx 圆心坐标
+     * @param cy 圆心坐标
+     * @param r 圆半径
+     * @param alpha 直线与x轴的夹角（弧度）
+     * @param linePoint 直线上任意一点的坐标
+     * @return null=圆与直线无交点
+     */
+    fun getNormalLineCircleIntersection(cx: Float, cy: Float, r: Float, alpha: Float, linePoint: PointF): Array<PointF>? {
+        val ae = (linePoint.y + cy) / tan(alpha)
+        val ao = linePoint.x - cx
+        val oe = ae - ao
+        val ob = oe * sin(alpha)
+
+        return when {
+            //没有交点
+            ob > r -> null
+            // 一个交点(切线)
+            ob == r -> {
+                arrayOf(PointF(cx - r * tan(alpha) * sin(alpha), cy - r * tan(alpha) * cos(alpha)))
+            }
+            //两个交点
+            else -> {
+                val og = ao / sin(alpha)
+                val bg = og + ob
+                val pb = bg * tan(alpha)
+                val bf = sqrt(r * r - ob * ob)
+                val pf = pb - bf
+                val pointA = PointF(linePoint.x - pf * cos(alpha), pf * sin(alpha) - linePoint.y)
+                val a = linePoint.x / cos(alpha) - pf - bf * 2
+                val pointB = PointF(a * cos(alpha), linePoint.x * tan(alpha) - linePoint.y)
+                arrayOf(pointA, pointB)
+            }
+        }
+
+    }
+
+    fun drawPoint(canvas: Canvas?, pointF: PointF, paint: Paint, r: Float = 10f) {
+        canvas?.drawCircle(pointF.x, pointF.y, r, paint)
+    }
+
 
     /**
      * 获取任意直径交圆的两点坐标
-     * @param slope 直径与x轴的夹角(弧度)
+     * @param alpha 直径与x轴的夹角(弧度)
      */
     fun getDiameterPoints(cx: Float, cy: Float, r: Float, alpha: Float): Array<PointF> {
         val pointA = PointF(cx + r * cos(alpha), cy - r * sin(alpha))
@@ -154,5 +200,15 @@ object AramisViewHelper {
     fun getDiameterPoints(c: PointF, r: Float, linePointA: PointF, linePointB: PointF): Array<PointF> {
         val alpha = getLineAlphaRadian(linePointA, linePointB)
         return getDiameterPoints(c.x, c.y, r, alpha)
+    }
+
+    /**
+     * 获取绘制文字居中时的x，y
+     */
+    fun getDrawTextXY(text: String, rectCenterX: Float, rectCenterY: Float, paint: Paint): FloatArray {
+        val x = rectCenterX - paint.measureText(text) / 2
+        val fm = paint.fontMetricsInt
+        val y = rectCenterY - fm.descent + (fm.bottom - fm.top) / 2
+        return floatArrayOf(x, y)
     }
 }

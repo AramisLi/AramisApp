@@ -58,8 +58,6 @@ class FerrisWheelView : View {
     private val pathBasket2 = Path()
 
     private fun init(attrs: AttributeSet?, defStyleAttr: Int) {
-
-
         paint.color = 0xff000000.toInt()
         paint.style = Paint.Style.STROKE
         paint.strokeWidth = dip(5).toFloat()
@@ -87,6 +85,13 @@ class FerrisWheelView : View {
         drawSpoke(canvas)
 
         //筐
+        drawBasket(canvas)
+
+        //底座
+        drawPedestal(canvas, cx, cy)
+    }
+
+    private fun drawBasket(canvas: Canvas?) {
         paint.strokeWidth = dip(3).toFloat()
         canvas?.drawCircle(cx, cy, r / 3, paint)
         paint.strokeWidth = 4f
@@ -102,9 +107,6 @@ class FerrisWheelView : View {
             canvas?.drawCircle(ax, ay, 10f, paint)
             drawBasket(canvas, ax, ay, paint)
         }
-
-        //底座
-        drawPedestal(canvas, cx, cy)
     }
 
     private fun drawSpoke(canvas: Canvas?) {
@@ -131,37 +133,34 @@ class FerrisWheelView : View {
         pathBasket.reset()
         pathBasket.moveTo(cx, cy)
         pathBasket.lineTo(cx - w2 + round, cy)
-        pathBasket.cubicTo(cx - w2 + round, cy,cx - w2,cy, cx - w2, cy + round)
+        pathBasket.cubicTo(cx - w2 + round, cy, cx - w2, cy, cx - w2, cy + round)
         pathBasket.lineTo(cx - w2, cy + h)
 
         pathBasket.lineTo(cx - w2 + round, cy + h)
-        pathBasket.lineTo(cx - w2 + round, cy + round*2)
-        pathBasket.cubicTo(cx - w2 + round, cy + round*2,cx - w2 + round, cy + round,cx - w2 + round*2, cy + round)
+        pathBasket.lineTo(cx - w2 + round, cy + round * 2)
+        pathBasket.cubicTo(cx - w2 + round, cy + round * 2, cx - w2 + round, cy + round, cx - w2 + round * 2, cy + round)
 
-        pathBasket.lineTo(cx + w2 - round*2, cy + round)
-        pathBasket.cubicTo(cx + w2 - round*2, cy + round,cx + w2 - round, cy + round,cx + w2 - round, cy + round*2)
+        pathBasket.lineTo(cx + w2 - round * 2, cy + round)
+        pathBasket.cubicTo(cx + w2 - round * 2, cy + round, cx + w2 - round, cy + round, cx + w2 - round, cy + round * 2)
         pathBasket.lineTo(cx + w2 - round, cy + h)
 
         pathBasket.lineTo(cx + w2, cy + h)
         pathBasket.lineTo(cx + w2, cy)
-        pathBasket.cubicTo(cx + w2,cy+round,cx + w2,cy,cx + w2-round,cy)
+        pathBasket.cubicTo(cx + w2, cy + round, cx + w2, cy, cx + w2 - round, cy)
 
-//        pathBasket.lineTo(cx + w2, cy + h)
-//        pathBasket.lineTo(cx + w2, cy)
         pathBasket.close()
         canvas?.drawPath(pathBasket, paint)
 
-        paint.color=0xff000000.toInt()
+        paint.color = 0xff000000.toInt()
         canvas?.drawRect(cx - w2, cy + h, cx + w2, cy + h + 20, paint)
         paint.color = 0xffff9988.toInt()
-//        canvas?.drawRect(cx - w2, cy + h+20, cx + w2, cy + h + 60, paint)
         pathBasket2.reset()
-        pathBasket2.moveTo(cx - w2,cy + h+20)
-        pathBasket2.lineTo(cx - w2,cy + h+20-round)
-        pathBasket2.cubicTo(cx - w2,cy + h+60-round,cx - w2,cy + h+60,cx - w2+round,cy + h+60)
-        pathBasket2.lineTo(cx + w2-round,cy + h+60)
-        pathBasket2.cubicTo(cx + w2-round,cy + h+60,cx + w2,cy + h+60,cx + w2,cy + h+60-round)
-        pathBasket2.lineTo(cx + w2,cy+ h+20)
+        pathBasket2.moveTo(cx - w2, cy + h + 20)
+        pathBasket2.lineTo(cx - w2, cy + h + 20 - round)
+        pathBasket2.cubicTo(cx - w2, cy + h + 60 - round, cx - w2, cy + h + 60, cx - w2 + round, cy + h + 60)
+        pathBasket2.lineTo(cx + w2 - round, cy + h + 60)
+        pathBasket2.cubicTo(cx + w2 - round, cy + h + 60, cx + w2, cy + h + 60, cx + w2, cy + h + 60 - round)
+        pathBasket2.lineTo(cx + w2, cy + h + 20)
         pathBasket2.close()
         canvas?.drawPath(pathBasket2, paint)
     }
