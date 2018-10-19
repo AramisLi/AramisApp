@@ -1,11 +1,11 @@
 package com.aramis.aramisapp
 
+import com.aramis.aramisapp.game.g2048.*
+import com.aramis.aramisapp.game.paohuzi.Game
+import com.aramis.aramisapp.game.paohuzi.bean.Pai
 import com.aramis.aramisapp.game.sudoku.SudokuUtil
+import org.junit.Assert.assertEquals
 import org.junit.Test
-
-import org.junit.Assert.*
-import java.util.*
-import kotlin.collections.RandomAccess
 import kotlin.math.asin
 import kotlin.math.sin
 import kotlin.math.sinh
@@ -85,20 +85,20 @@ class ExampleUnitTest {
         for (i in randomSudokuQuestion.second) {
             println(i)
         }
-        var seeCount=0
-        for (i in 0..8){
-            for (j in 0..8){
-                if (randomSudokuQuestion.second[i][j]>0){
+        var seeCount = 0
+        for (i in 0..8) {
+            for (j in 0..8) {
+                if (randomSudokuQuestion.second[i][j] > 0) {
                     seeCount++
                 }
             }
         }
         println("随机数独问题共有${seeCount}个可见数")
 
-        val solutions=sudokuUtil.checkMultiSolve(randomSudokuQuestion.second)
+        val solutions = sudokuUtil.checkMultiSolve(randomSudokuQuestion.second)
         println("此问题有${solutions?.size}个解")
         solutions?.apply {
-            for(i in this){
+            for (i in this) {
                 println(i)
 //                for (j in i){
 //                    println(j)
@@ -112,16 +112,364 @@ class ExampleUnitTest {
 
     @Test
     fun cc() {
-        val a= listOf(1,2,3,4,5)
-        val b= listOf(1,2,3,4,5)
-
-        println(a==b)
+//        val a = listOf(1, 2, 3, 4, 5)
+//        val b = listOf(1, 2, 3, 4, 5)
+//
+//        println(a == b)
+        val a = listOf(-1, 2, -3, 4, -5)
+        val b = a.filter { it > 0 }
+        println(b)
     }
 
     @Test
-fun dd(){
-        var timeStr="00:00:00"
-        val second = timeStr.subSequence(timeStr.lastIndexOf(":") + 1, timeStr.length)
-        println(second)
+    fun dd() {
+//        val array1 = arrayOf(arrayOf(
+//                Tile(0, 1, 2)
+//        ))
+
+        val list = mutableListOf<MutableList<Tile?>>()
+
+        (0 until 3).forEach { xx ->
+            list.add((0 until 4).map { yy ->
+                Tile(xx, yy, xx + yy)
+            }.toMutableList())
+        }
+        println(list)
+
+        (0 until list.size).forEach { xx ->
+            (0 until list[0].size).forEach { yy ->
+                list[xx][yy] = null
+            }
+        }
+        println(list)
+
+        val array1 = list.toTypedArray()
     }
+
+    @Test
+    fun testPaohuzi() {
+        val game = Game(3)
+
+        val l = game.getPaiList().toMutableList()
+//        println(l.size)
+
+        //随机取20张
+        val play1PaiList = (0 until 20).map {
+            val random = (0 until l.size).shuffled().first()
+            l.removeAt(random)
+        }.toMutableList()
+
+        game.sortPais(play1PaiList)
+
+//        play1PaiList.sortBy { it.value }
+        printPaiList(play1PaiList)
+//        println(l.size)
+    }
+
+    private fun printPaiList(paiList: List<Pai>) {
+        paiList.forEach {
+            println(it)
+        }
+    }
+
+    private fun log2(n: Int): Int {
+        return if (n <= 0) {
+            -1
+        } else {
+            31 - Integer.numberOfLeadingZeros(n)
+        }
+    }
+
+    private val handleMatrix = Array(M2048.numX) { xx ->
+        Array(M2048.numY) { yy ->
+            MCell(xx, yy, 0)
+        }
+    }
+
+    @Test
+    fun ee() {
+        val forwardMatrix = Array(M2048.numX) { xx ->
+            Array(M2048.numY) { yy ->
+                MCell(xx, yy, 0)
+            }
+        }
+
+        handleMatrix[0][0].value = 2
+        handleMatrix[0][1].value = 2
+        handleMatrix[0][2].value = 2
+        handleMatrix[0][3].value = 2
+        handleMatrix[2][2].value = 2
+        handleMatrix[2][3].value = 2
+        println("original:")
+        printHandleMatrix(handleMatrix)
+
+        val direction = M2048.MOVE_LEFT
+        val horizontal = direction == M2048.MOVE_LEFT || direction == M2048.MOVE_RIGHT
+
+//        for (xx in (0 until handleMatrix.size)) {
+//            for (yy in (0 until handleMatrix[0].size)) {
+//                if (horizontal) {
+//                    val isLeft = direction == M2048.MOVE_LEFT
+//                    val y = if (isLeft) yy else M2048.numY - yy - 1
+//                    if (handleMatrix[xx][y].value == 0) {
+//                        val range = if (isLeft) y until M2048.numY else y downTo 0
+//                        for (i in range) {
+//                            if (handleMatrix[xx][i].value != 0) {
+//                                handleMatrix[xx][i].step++
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    val isUp = direction == M2048.MOVE_UP
+//                    val x = if (isUp) xx else M2048.numX - xx - 1
+//                    if (handleMatrix[x][yy].value == 0) {
+//                        val range = if (isUp) x until M2048.numX else x downTo 0
+//                        for (i in range) {
+//                            if (handleMatrix[i][yy].value != 0) {
+//                                handleMatrix[i][yy].step++
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        println()
+        println("transform:")
+        printHandleMatrix(handleMatrix)
+
+        copyMatrix(handleMatrix, forwardMatrix)
+
+//        forEachMatrix(forwardMatrix) { xx, yy ->
+//            if (horizontal) {
+//                val cell = forwardMatrix[xx][yy]
+//                if (cell.step != 0) {
+//                    val y = yy - cell.step
+//                    forwardMatrix[xx][y].value = cell.value
+//                    cell.value = 0
+//                }
+//            }
+//        }
+
+        println()
+        println("transform:")
+        printHandleMatrix(forwardMatrix)
+
+        forEachMatrix(forwardMatrix) { xx, yy ->
+            val cell = forwardMatrix[xx][yy]
+            when (direction) {
+                M2048.MOVE_LEFT -> {
+                    if (cell.value != 0 && yy < forwardMatrix[xx].size - 1 && cell.value == forwardMatrix[xx][yy + 1].value) {
+                        cell.value *= 2
+                        forwardMatrix[xx][yy + 1].value = 0
+                        if (yy != 0 && forwardMatrix[xx][yy - 1].value == 0) {
+                            forwardMatrix[xx][yy - 1].value = cell.value
+                            cell.value = 0
+                        }
+                    }
+                }
+                M2048.MOVE_RIGHT -> {
+                    val end = 0
+                    val nextY = yy - 1
+                    if (cell.value != 0 && yy > end && cell.value == forwardMatrix[xx][nextY].value) {
+                        cell.value *= 2
+                        forwardMatrix[xx][nextY].value = 0
+                        if (yy != 0 && forwardMatrix[xx][yy + 1].value == 0) {
+                            forwardMatrix[xx][yy + 1].value = cell.value
+                            cell.value = 0
+                        }
+                    }
+                }
+            }
+
+        }
+
+        println()
+        println("transform:")
+        printHandleMatrix(forwardMatrix)
+    }
+
+    private fun printHandleMatrix(handleMatrix: Array<Array<MCell>>) {
+        handleMatrix.forEachIndexed { index, ints ->
+            ints.forEach { print("${it.value},") }
+            println()
+        }
+    }
+
+    private fun forEachMatrix(handleMatrix: Array<Array<MCell>>, callback: (xx: Int, yy: Int) -> Unit) {
+        for (xx in (0 until handleMatrix.size)) {
+            for (yy in (0 until handleMatrix[0].size)) {
+                callback.invoke(xx, yy)
+            }
+        }
+    }
+
+    private fun copyMatrix(from: Array<Array<MCell>>, to: Array<Array<MCell>>) {
+        forEachMatrix(from) { xx, yy ->
+            to[xx][yy].value = from[xx][yy].value
+        }
+    }
+
+    private fun initMatrix() {
+//        handleMatrix[0][0].value = 2
+//        handleMatrix[0][1].value = 2
+//        handleMatrix[0][2].value = 2
+//        handleMatrix[0][3].value = 2
+//        handleMatrix[1][1].value = 2
+//        handleMatrix[1][2].value = 2
+//        handleMatrix[1][3].value = 2
+//        handleMatrix[2][0].value = 2
+//        handleMatrix[2][3].value = 2
+//        handleMatrix[3][1].value = 2
+//        handleMatrix[3][2].value = 2
+//        handleMatrix[3][3].value = 2
+
+        handleMatrix[0][2].value=2
+        handleMatrix[1][3].value=2
+        handleMatrix[0][0].value=2
+        handleMatrix[1][0].value=2
+    }
+
+    @Test
+    fun ff() {
+        initMatrix()
+        var direction = M2048.MOVE_RIGHT
+        println("origin:")
+        printHandleMatrix2()
+        formatHandleMatrix(direction)
+        println("formatHandleMatrix:")
+        printHandleMatrix2()
+
+//        refreshHandleMatrix(direction)
+//        println("refreshHandleMatrix:")
+//        printHandleMatrix2()
+    }
+
+    private fun refreshHandleMatrix(direction: Int) {
+        val horizontal = direction == M2048.MOVE_LEFT || direction == M2048.MOVE_RIGHT
+        val sign = if (direction == M2048.MOVE_RIGHT || direction == M2048.MOVE_DOWN) 1 else -1
+
+        val tempMatrix = Array(M2048.numX) { xx ->
+            Array(M2048.numY) { yy ->
+                MCell(xx, yy, 0)
+            }
+        }
+        forEachMatrix(handleMatrix) { xx, yy ->
+            val cell = handleMatrix[xx][yy]
+            if (cell.movedX > 0 || cell.movedY > 0) {
+                val mx = if (horizontal) cell.x else cell.x + sign * cell.movedX
+                val my = if (horizontal) cell.y + sign * cell.movedY else cell.y
+                handleMatrix[mx][my].value = if (handleMatrix[mx][my].mergeFirst) cell.value * 2 else cell.value
+                println("cell.x:${cell.x},cell.y:${cell.y},movedX:${cell.movedX},movedY:${cell.movedY},mx:$mx,my:$my,moveValue:${handleMatrix[mx][my].value}")
+                tempMatrix[mx][my].value = handleMatrix[mx][my].value
+            } else if (cell.value != 0 && cell.mergeCell == null) {
+                tempMatrix[xx][yy].value = cell.value
+            }
+        }
+
+        forEachMatrix(handleMatrix) { xx, yy ->
+            handleMatrix[xx][yy].value = tempMatrix[xx][yy].value
+            handleMatrix[xx][yy].clear()
+        }
+
+        println("tempMatrix:")
+        printHandleMatrix(tempMatrix)
+    }
+
+    private fun formatHandleMatrix(direction: Int) {
+        val horizontal = direction == M2048.MOVE_LEFT || direction == M2048.MOVE_RIGHT
+
+        fun followedEachAdd(xx: Int, yy: Int, isLeftOrUp: Boolean) {
+            if (horizontal) {
+                val range = if (isLeftOrUp) yy + 1 until handleMatrix[yy].size else yy - 1 downTo 0
+                range.filter { handleMatrix[xx][it].value != 0 }
+                        .forEach {
+                            val other = handleMatrix[xx][it]
+                            other.movedY += 1
+                        }
+            } else {
+                val range = if (isLeftOrUp) xx + 1 until handleMatrix[xx].size else xx - 1 downTo 0
+                range.filter { handleMatrix[it][yy].value != 0 }
+                        .forEach {
+                            val other = handleMatrix[it][yy]
+                            other.movedX += 1
+                        }
+            }
+
+        }
+
+        forEachMatrix(handleMatrix) { xx, yy ->
+
+            if (horizontal) {
+                val isLeft = direction == M2048.MOVE_LEFT
+                var tempY = if (isLeft) yy else handleMatrix.size - yy - 1
+                val cell = handleMatrix[xx][tempY]
+                if (cell.value == 0) {
+                    followedEachAdd(xx, tempY, isLeft)
+                } else {
+                    val b = if (isLeft) tempY > 0 else tempY < handleMatrix[xx].size - 1
+                    while (b && (if (isLeft) tempY > 0 else tempY < handleMatrix[xx].size - 1)) {
+                        val position = if (isLeft) tempY - 1 else tempY + 1
+                        if (handleMatrix[xx][position].value == cell.value && handleMatrix[xx][position].mergeCell == null && cell.mergeCell == null) {
+                            cell.movedY += 1
+                            cell.mergeCell = handleMatrix[xx][position]
+                            handleMatrix[xx][position].mergeCell = cell
+                            handleMatrix[xx][position].mergeFirst = true
+                            followedEachAdd(xx, tempY, isLeft)
+                        }
+                        tempY += if (isLeft) -1 else 1
+                    }
+                }
+            } else {
+                val isUp = direction == M2048.MOVE_UP
+                var tempX = if (isUp) xx else handleMatrix.size - xx - 1
+                val cell = handleMatrix[tempX][yy]
+                if (cell.value == 0) {
+                    followedEachAdd(tempX, yy, isUp)
+                } else {
+                    val b = if (isUp) tempX > 0 else tempX < handleMatrix[xx].size - 1
+                    while (b && (if (isUp) tempX > 0 else tempX < handleMatrix[xx].size - 1)) {
+                        val position = if (isUp) tempX - 1 else tempX + 1
+                        if (handleMatrix[position][yy].value == cell.value && handleMatrix[position][yy].mergeCell == null && cell.mergeCell == null) {
+                            cell.movedX += 1
+                            cell.mergeCell = handleMatrix[position][yy]
+                            handleMatrix[position][yy].mergeCell = cell
+                            handleMatrix[position][yy].mergeFirst = true
+                            followedEachAdd(tempX, yy, isUp)
+                        }
+                        tempX += if (isUp) -1 else 1
+                    }
+                }
+            }
+        }
+    }
+
+    private fun printHandleMatrix2() {
+        handleMatrix.forEachIndexed { index, ints ->
+            ints.forEach { print("(x:${it.x},y:${it.y},value:${it.value},movedX:${it.movedX},movedY:${it.movedY}),") }
+            println()
+        }
+    }
+
+
+    @Test
+    fun gg() {
+        var a = 0
+
+        var begin = System.currentTimeMillis()
+        (1..9999999).filter {
+            a++
+            it % 2 == 0
+        }.forEach { a = a + it * it / it - it }
+        println("函数用时${System.currentTimeMillis() - begin}")
+
+        begin = System.currentTimeMillis()
+        for (it in (1..9999999)) {
+            if (it % 2 == 0) {
+                a = a + it * it / it - it
+            }
+        }
+        println("普通用时${System.currentTimeMillis() - begin}")
+    }
+
+
 }

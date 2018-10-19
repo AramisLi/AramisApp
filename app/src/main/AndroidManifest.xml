@@ -40,6 +40,9 @@
         <activity android:name=".activity.CommonViewsActivity"/>
         <activity android:name=".game.sudoku.SudokuActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".game.g2048.G2048Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

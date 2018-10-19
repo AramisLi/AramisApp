@@ -1,9 +1,6 @@
 package com.aramis.library.utils
 
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
-import android.graphics.PointF
+import android.graphics.*
 import org.w3c.dom.Text
 import kotlin.math.*
 import android.opengl.ETC1.getHeight
@@ -210,5 +207,18 @@ object AramisViewHelper {
         val fm = paint.fontMetricsInt
         val y = rectCenterY - fm.descent + (fm.bottom - fm.top) / 2
         return floatArrayOf(x, y)
+    }
+
+    fun getDrawTextXY(text: String, rectF: RectF, paint: Paint): FloatArray {
+
+        return getDrawTextXY(text, rectF.centerX(), rectF.centerY(), paint)
+    }
+
+    fun drawTestRect(canvas: Canvas?, rectF: RectF, paint: Paint) {
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 2f
+        canvas?.drawRect(rectF, paint)
+        canvas?.drawLine(rectF.left, rectF.top + rectF.height() / 2, rectF.right, rectF.top + rectF.height() / 2, paint)
+        canvas?.drawLine(rectF.left + rectF.width() / 2f, rectF.top, rectF.left + rectF.width() / 2f, rectF.bottom, paint)
     }
 }

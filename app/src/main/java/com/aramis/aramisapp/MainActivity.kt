@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import com.aramis.aramisapp.activity.BaiDuMapActivity
 import com.aramis.aramisapp.activity.CommonViewsActivity
+import com.aramis.aramisapp.game.g2048.G2048Activity
 import com.aramis.aramisapp.game.sudoku.SudokuActivity
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
@@ -21,7 +22,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
-    private val menuList = mutableListOf("NDK", "NDK-CMake", "百度地图", "FMOD 魔音", "自定义View","React Native","数独")
+    private val menuList = mutableListOf("NDK", "NDK-CMake", "百度地图", "FMOD 魔音", "自定义View", "React Native", "数独", "2048")
     private val adapter = SimpleTextAdapter(menuList)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                 4 -> startActivity<CommonViewsActivity>()
                 5 -> startActivity<NativeActivity>()
                 6 -> startActivity<SudokuActivity>()
+                7 -> startActivity<G2048Activity>()
             }
         }
         //测试ara-ndk-cmake模块
@@ -54,9 +56,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         val flexboxLayoutManager = FlexboxLayoutManager(this)
-        flexboxLayoutManager.flexDirection=FlexDirection.COLUMN
-        flexboxLayoutManager.justifyContent=JustifyContent.FLEX_END
-        recyclerView.layoutManager=flexboxLayoutManager
+        flexboxLayoutManager.flexDirection = FlexDirection.COLUMN
+        flexboxLayoutManager.justifyContent = JustifyContent.FLEX_END
+        recyclerView.layoutManager = flexboxLayoutManager
     }
 
     private fun initView() {

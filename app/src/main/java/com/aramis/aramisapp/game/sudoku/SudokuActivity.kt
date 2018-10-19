@@ -32,6 +32,7 @@ class SudokuActivity : AraBaseActivity() {
 
         sudokuView.showAuxiliaryLine = true
         sudokuView.showAuxiliaryPoint = true
+        sudokuView.seeCount=25
         sudokuView.onSolveSuccessListener = {
             sudokuControlView.solveSuccess()
             dialog.show()

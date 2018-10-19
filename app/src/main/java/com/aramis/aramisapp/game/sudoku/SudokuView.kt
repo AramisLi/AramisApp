@@ -57,7 +57,7 @@ class SudokuView : View {
     private var nextRandomMatrix: List<List<Int>>? = null
     private var nextAnswerMatrix: List<List<Int>>? = null
     //可见数
-    var seeCount = 79
+    var seeCount = 25
     private var isFinish = false
 
     init {
@@ -67,12 +67,17 @@ class SudokuView : View {
         textPaint.textSize = dip(16).toFloat()
         auxiliaryPointPaint.color = 0xFFFFD39B.toInt()
 
-        getRandomSudokuQuestion()
     }
 
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?) : super(context){
+        afterInit()
+    }
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs){ afterInit()}
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr){ afterInit()}
+
+    private fun afterInit(){
+        getRandomSudokuQuestion()
+    }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
