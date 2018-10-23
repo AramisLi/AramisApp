@@ -1,5 +1,7 @@
 package com.aramis.library.extentions
 
+import android.graphics.Rect
+import android.graphics.RectF
 import com.aramis.library.utils.LogUtils
 import java.math.RoundingMode
 import java.security.MessageDigest
@@ -59,4 +61,13 @@ fun <T> MutableCollection<T>.pop(): T {
     val last = this.last()
     this.remove(last)
     return last
+}
+
+fun RectF.toRect(): Rect {
+    return Rect(this.left.toInt(),this.top.toInt(),this.right.toInt(),this.bottom.toInt())
+}
+
+fun Rect.toRectF():RectF{
+    return RectF(this.left.toFloat(),this.top.toFloat(),this.right.toFloat(),this.bottom.toFloat())
+
 }

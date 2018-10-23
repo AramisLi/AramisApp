@@ -6,9 +6,7 @@ import com.aramis.aramisapp.game.paohuzi.bean.Pai
 import com.aramis.aramisapp.game.sudoku.SudokuUtil
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.math.asin
-import kotlin.math.sin
-import kotlin.math.sinh
+import kotlin.math.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -251,8 +249,9 @@ class ExampleUnitTest {
 //        }
 
         println()
-        println("transform:")
-        printHandleMatrix(forwardMatrix)
+        println("[0,0]:${handleMatrix[0][0]}")
+        println("handleMatrix:")
+        printHandleMatrix(handleMatrix)
 
         forEachMatrix(forwardMatrix) { xx, yy ->
             val cell = forwardMatrix[xx][yy]
@@ -323,56 +322,60 @@ class ExampleUnitTest {
 //        handleMatrix[3][2].value = 2
 //        handleMatrix[3][3].value = 2
 
-        handleMatrix[0][2].value=2
-        handleMatrix[1][3].value=2
-        handleMatrix[0][0].value=2
-        handleMatrix[1][0].value=2
+        handleMatrix[0][0].value = 16
+        handleMatrix[0][1].value = 2
+        handleMatrix[0][2].value = 4
+        handleMatrix[0][3].value = 2
+        handleMatrix[1][0].value = 2
+        handleMatrix[2][0].value = 4
+        handleMatrix[3][0].value = 2
+//        handleMatrix[1][3].value = 2
+//        handleMatrix[1][0].value = 2
+//        handleMatrix[2][2].value = 2
     }
 
     @Test
     fun ff() {
         initMatrix()
-        var direction = M2048.MOVE_RIGHT
+        var direction = M2048.MOVE_UP
         println("origin:")
-        printHandleMatrix2()
+//        printHandleMatrix2()
+        printHandleMatrix(handleMatrix)
         formatHandleMatrix(direction)
         println("formatHandleMatrix:")
         printHandleMatrix2()
 
-//        refreshHandleMatrix(direction)
-//        println("refreshHandleMatrix:")
-//        printHandleMatrix2()
+        refreshHandleMatrix(direction)
+        println("refreshHandleMatrix:")
+        printHandleMatrix2()
     }
 
     private fun refreshHandleMatrix(direction: Int) {
         val horizontal = direction == M2048.MOVE_LEFT || direction == M2048.MOVE_RIGHT
         val sign = if (direction == M2048.MOVE_RIGHT || direction == M2048.MOVE_DOWN) 1 else -1
 
-        val tempMatrix = Array(M2048.numX) { xx ->
-            Array(M2048.numY) { yy ->
-                MCell(xx, yy, 0)
-            }
-        }
         forEachMatrix(handleMatrix) { xx, yy ->
-            val cell = handleMatrix[xx][yy]
+            val cell = if (horizontal) {
+                val isLeft = direction == M2048.MOVE_LEFT
+                val tempY = if (isLeft) yy else handleMatrix[xx].size - yy - 1
+                handleMatrix[xx][tempY]
+            } else {
+                val isUp = direction == M2048.MOVE_UP
+                val tempX = if (isUp) xx else handleMatrix[xx].size - xx - 1
+                handleMatrix[tempX][yy]
+            }
             if (cell.movedX > 0 || cell.movedY > 0) {
                 val mx = if (horizontal) cell.x else cell.x + sign * cell.movedX
                 val my = if (horizontal) cell.y + sign * cell.movedY else cell.y
-                handleMatrix[mx][my].value = if (handleMatrix[mx][my].mergeFirst) cell.value * 2 else cell.value
-                println("cell.x:${cell.x},cell.y:${cell.y},movedX:${cell.movedX},movedY:${cell.movedY},mx:$mx,my:$my,moveValue:${handleMatrix[mx][my].value}")
-                tempMatrix[mx][my].value = handleMatrix[mx][my].value
-            } else if (cell.value != 0 && cell.mergeCell == null) {
-                tempMatrix[xx][yy].value = cell.value
+                handleMatrix[mx][my].value += cell.value
+                cell.value = 0
             }
-        }
 
-        forEachMatrix(handleMatrix) { xx, yy ->
-            handleMatrix[xx][yy].value = tempMatrix[xx][yy].value
-            handleMatrix[xx][yy].clear()
+            cell.clear()
         }
 
         println("tempMatrix:")
-        printHandleMatrix(tempMatrix)
+        printHandleMatrix(handleMatrix)
     }
 
     private fun formatHandleMatrix(direction: Int) {
@@ -384,14 +387,21 @@ class ExampleUnitTest {
                 range.filter { handleMatrix[xx][it].value != 0 }
                         .forEach {
                             val other = handleMatrix[xx][it]
-                            other.movedY += 1
+                            if (xx == 0 && it == 0) {
+                                println("add ++ xx:$xx,yy:${yy + 1}")
+                            }
+                            if (other.mergeCell == null) {
+                                other.movedY += 1
+                            }
                         }
             } else {
                 val range = if (isLeftOrUp) xx + 1 until handleMatrix[xx].size else xx - 1 downTo 0
                 range.filter { handleMatrix[it][yy].value != 0 }
                         .forEach {
                             val other = handleMatrix[it][yy]
-                            other.movedX += 1
+                            if (other.mergeCell == null) {
+                                other.movedX += 1
+                            }
                         }
             }
 
@@ -401,42 +411,83 @@ class ExampleUnitTest {
 
             if (horizontal) {
                 val isLeft = direction == M2048.MOVE_LEFT
-                var tempY = if (isLeft) yy else handleMatrix.size - yy - 1
-                val cell = handleMatrix[xx][tempY]
+                val currentCellY = if (isLeft) yy else handleMatrix.size - yy - 1
+                val cell = handleMatrix[xx][if (isLeft) yy else handleMatrix.size - yy - 1]
+
                 if (cell.value == 0) {
-                    followedEachAdd(xx, tempY, isLeft)
+                    followedEachAdd(xx, currentCellY, isLeft)
                 } else {
-                    val b = if (isLeft) tempY > 0 else tempY < handleMatrix[xx].size - 1
-                    while (b && (if (isLeft) tempY > 0 else tempY < handleMatrix[xx].size - 1)) {
-                        val position = if (isLeft) tempY - 1 else tempY + 1
-                        if (handleMatrix[xx][position].value == cell.value && handleMatrix[xx][position].mergeCell == null && cell.mergeCell == null) {
-                            cell.movedY += 1
-                            cell.mergeCell = handleMatrix[xx][position]
-                            handleMatrix[xx][position].mergeCell = cell
-                            handleMatrix[xx][position].mergeFirst = true
-                            followedEachAdd(xx, tempY, isLeft)
+                    //前一个要检查的单元格的Y
+                    var nextCellY = if (isLeft) currentCellY - 1 else currentCellY + 1
+                    //在可执行的范围内。既向左移动时不为0，向右移动时小于3（handleMatrix[xx].size - 1）
+                    while (if (isLeft) nextCellY >= 0 else nextCellY <= handleMatrix[xx].size - 1) {
+                        //检查 被检查的单元格和当前cell间的单元格的值是不是0，是合并，不是不合并
+                        var checkBetweenIsZero = true
+//                        if (xx == 0 && currentCellY == 3) {
+//                            println(" in in")
+//                        }
+                        if (abs(nextCellY - currentCellY) > 1) {
+                            val start = if (isLeft) nextCellY + 1 else currentCellY
+                            val end = if (isLeft) currentCellY else nextCellY - 1
+                            println("start:$start,end:$end")
+                            for (i in (start until end)) {
+                                if (handleMatrix[xx][i].value != 0) {
+                                    checkBetweenIsZero = false
+                                    break
+                                }
+                            }
                         }
-                        tempY += if (isLeft) -1 else 1
+
+                        if (checkBetweenIsZero && handleMatrix[xx][nextCellY].value == cell.value && handleMatrix[xx][nextCellY].mergeCell == null && cell.mergeCell == null) {
+                            cell.movedY += 1
+                            cell.mergeCell = handleMatrix[xx][nextCellY]
+                            handleMatrix[xx][nextCellY].mergeCell = cell
+                            handleMatrix[xx][nextCellY].mergeFirst = true
+                            followedEachAdd(xx, currentCellY, isLeft)
+                            println("当前单元格:(xx:$xx,yy:$currentCellY,value:${handleMatrix[xx][currentCellY].value}mergeFirst:${handleMatrix[xx][currentCellY].mergeFirst}),要合并的单元格:(xx:$xx,yy:$nextCellY,value:${handleMatrix[xx][nextCellY].value},mergeFirst:${handleMatrix[xx][nextCellY].mergeFirst})")
+                        }
+                        //下一个单元格
+                        nextCellY = if (isLeft) nextCellY - 1 else nextCellY + 1
+
                     }
                 }
             } else {
                 val isUp = direction == M2048.MOVE_UP
-                var tempX = if (isUp) xx else handleMatrix.size - xx - 1
-                val cell = handleMatrix[tempX][yy]
+                val currentCellX = if (isUp) xx else handleMatrix.size - xx - 1
+                val cell = handleMatrix[currentCellX][yy]
+
                 if (cell.value == 0) {
-                    followedEachAdd(tempX, yy, isUp)
+                    followedEachAdd(currentCellX, yy, isUp)
                 } else {
-                    val b = if (isUp) tempX > 0 else tempX < handleMatrix[xx].size - 1
-                    while (b && (if (isUp) tempX > 0 else tempX < handleMatrix[xx].size - 1)) {
-                        val position = if (isUp) tempX - 1 else tempX + 1
-                        if (handleMatrix[position][yy].value == cell.value && handleMatrix[position][yy].mergeCell == null && cell.mergeCell == null) {
-                            cell.movedX += 1
-                            cell.mergeCell = handleMatrix[position][yy]
-                            handleMatrix[position][yy].mergeCell = cell
-                            handleMatrix[position][yy].mergeFirst = true
-                            followedEachAdd(tempX, yy, isUp)
+//                    println("当前单元格:(xx:$currentCellX,yy:$yy,value:${handleMatrix[currentCellX][yy].value}mergeFirst:${handleMatrix[currentCellX][yy].mergeFirst})")
+                    var nextCellX = if (isUp) currentCellX - 1 else currentCellX + 1
+                    while (if (isUp) nextCellX >= 0 else nextCellX <= handleMatrix[xx].size - 1) {
+//                        println("nextCellX:$nextCellX,currentCellX:$currentCellX")
+                        //检查 被检查的单元格和当前cell间的单元格的值是不是0，是合并，不是不合并
+                        var checkBetweenIsZero = true
+                        if (abs(nextCellX - currentCellX) > 1) {
+                            val start = if (isUp) nextCellX + 1 else currentCellX
+                            val end = if (isUp) currentCellX else nextCellX - 1
+                            if (currentCellX==3 && yy==0){
+                                println("start:$start,end:$end")
+                            }
+                            for (i in (start until end)) {
+                                if (handleMatrix[i][yy].value != 0) {
+                                    checkBetweenIsZero = false
+                                    break
+                                }
+                            }
                         }
-                        tempX += if (isUp) -1 else 1
+
+                        if (checkBetweenIsZero && handleMatrix[nextCellX][yy].value == cell.value && handleMatrix[nextCellX][yy].mergeCell == null && cell.mergeCell == null) {
+                            cell.movedX += 1
+                            cell.mergeCell = handleMatrix[nextCellX][yy]
+                            handleMatrix[nextCellX][yy].mergeCell = cell
+                            handleMatrix[nextCellX][yy].mergeFirst = true
+                            followedEachAdd(currentCellX, yy, isUp)
+                            println("当前单元格:(xx:$currentCellX,yy:$yy,value:${handleMatrix[currentCellX][yy].value},mergeFirst:${handleMatrix[currentCellX][yy].mergeFirst}),要合并的单元格:(xx:$nextCellX,yy:$yy,value:${handleMatrix[nextCellX][yy].value},mergeFirst:${handleMatrix[nextCellX][yy].mergeFirst})")
+                        }
+                        nextCellX += if (isUp) -1 else 1
                     }
                 }
             }
@@ -453,22 +504,10 @@ class ExampleUnitTest {
 
     @Test
     fun gg() {
-        var a = 0
 
-        var begin = System.currentTimeMillis()
-        (1..9999999).filter {
-            a++
-            it % 2 == 0
-        }.forEach { a = a + it * it / it - it }
-        println("函数用时${System.currentTimeMillis() - begin}")
+        println(27.0.pow(1.0 / 3))
 
-        begin = System.currentTimeMillis()
-        for (it in (1..9999999)) {
-            if (it % 2 == 0) {
-                a = a + it * it / it - it
-            }
-        }
-        println("普通用时${System.currentTimeMillis() - begin}")
+        println(log(8f, 2f))
     }
 
 
