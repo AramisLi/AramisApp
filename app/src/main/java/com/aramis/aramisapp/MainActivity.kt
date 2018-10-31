@@ -7,6 +7,8 @@ import com.aramis.aramisapp.activity.BaiDuMapActivity
 import com.aramis.aramisapp.activity.CommonViewsActivity
 import com.aramis.aramisapp.game.g2048.G2048Activity
 import com.aramis.aramisapp.game.sudoku.SudokuActivity
+import com.aramis.aramisapp.pendulum.ColorTestActivity
+import com.aramis.aramisapp.pendulum.PendulumActivity
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
@@ -16,17 +18,21 @@ import hello.com.aramis.ndk.cmake.ui.activity.FileSplitActivity
 import hello.com.aramis.ndk.cmake.ui.activity.FmodActivity
 import hello.com.aramis.ndk.cmake.utils.AraFileSplitUtil
 import hello.com.aramis.ndk.cmake.utils.FmodUtil
+import hello.com.aramis.opengl.OpenGLMainActivity
+import hello.com.aramis.opengl.d2.Constant
 import hello.com.aramis.reactnative.ui.NativeActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.displayMetrics
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class MainActivity : AppCompatActivity() {
-    private val menuList = mutableListOf("NDK", "NDK-CMake", "百度地图", "FMOD 魔音", "自定义View", "React Native", "数独", "2048")
+    private val menuList = mutableListOf("NDK", "NDK-CMake", "百度地图", "FMOD 魔音", "自定义View", "React Native", "数独", "2048", "牛顿球", "OpenGL")
     private val adapter = SimpleTextAdapter(menuList)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Constant.init(this.displayMetrics.widthPixels, this.displayMetrics.heightPixels)
 
         initView()
         setListener()
@@ -47,6 +53,8 @@ class MainActivity : AppCompatActivity() {
                 5 -> startActivity<NativeActivity>()
                 6 -> startActivity<SudokuActivity>()
                 7 -> startActivity<G2048Activity>()
+                8 -> startActivity<PendulumActivity>()
+                9 -> startActivity<OpenGLMainActivity>()
             }
         }
         //测试ara-ndk-cmake模块

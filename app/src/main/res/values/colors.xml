@@ -27,4 +27,7 @@
     <color name="color_rectangle_1024">#edc53f</color>
     <color name="color_rectangle_2048">#edc22e</color>
     <color name="color_rectangle_4096">#3c3a32</color>
+
+    <color name="color_pendulum_back">#323232</color>
+    <color name="color_pendulum_shadow">#252525</color>
 </resources>

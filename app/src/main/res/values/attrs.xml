@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SettingView">
+        <attr name="settingButtonX" format="integer" />
+        <attr name="settingButtonY" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="SeekBarLayout">
+        <attr name="headName" format="string" />
+        <attr name="footName" format="string" />
+        <attr name="max" format="integer" />
+        <attr name="progress" format="integer" />
+    </declare-styleable>
+</resources>

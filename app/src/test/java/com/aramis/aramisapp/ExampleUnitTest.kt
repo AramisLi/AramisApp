@@ -4,6 +4,8 @@ import com.aramis.aramisapp.game.g2048.*
 import com.aramis.aramisapp.game.paohuzi.Game
 import com.aramis.aramisapp.game.paohuzi.bean.Pai
 import com.aramis.aramisapp.game.sudoku.SudokuUtil
+import com.aramis.aramisapp.pendulum.ColorHelper
+import com.aramis.library.extentions.toHex
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import kotlin.math.*
@@ -468,7 +470,7 @@ class ExampleUnitTest {
                         if (abs(nextCellX - currentCellX) > 1) {
                             val start = if (isUp) nextCellX + 1 else currentCellX
                             val end = if (isUp) currentCellX else nextCellX - 1
-                            if (currentCellX==3 && yy==0){
+                            if (currentCellX == 3 && yy == 0) {
                                 println("start:$start,end:$end")
                             }
                             for (i in (start until end)) {
@@ -505,9 +507,20 @@ class ExampleUnitTest {
     @Test
     fun gg() {
 
-        println(27.0.pow(1.0 / 3))
+//        val length = 80
+//        println("30radian:${Math.toRadians(30.0)}")
+//
+//        println("对边:${length * sin(Math.toRadians(30.0))}")
+//
+//        println("sin30:${sin(Math.toRadians(30.0))},asin:${asin(0.5)},sinh:${sinh(0.5)}")
+//
+//        println("a:${Math.toDegrees(asin(0.5))}")
+//        println("Math.asin:${Math.asin(0.5)}")
 
-        println(log(8f, 2f))
+//        println(log(8f, 2f))
+
+//        val colorHelper=ColorHelper()
+        print(4095.toHex())
     }
 
 

@@ -64,10 +64,34 @@ fun <T> MutableCollection<T>.pop(): T {
 }
 
 fun RectF.toRect(): Rect {
-    return Rect(this.left.toInt(),this.top.toInt(),this.right.toInt(),this.bottom.toInt())
+    return Rect(this.left.toInt(), this.top.toInt(), this.right.toInt(), this.bottom.toInt())
 }
 
-fun Rect.toRectF():RectF{
-    return RectF(this.left.toFloat(),this.top.toFloat(),this.right.toFloat(),this.bottom.toFloat())
+fun Rect.toRectF(): RectF {
+    return RectF(this.left.toFloat(), this.top.toFloat(), this.right.toFloat(), this.bottom.toFloat())
 
+}
+
+fun Int.toHex(): String {
+
+    fun toHex16(n: Int): String {
+        return if (n < 10) {
+            n.toString()
+        } else {
+            when (n) {
+                10 -> "A"
+                11 -> "B"
+                12 -> "C"
+                13 -> "D"
+                14 -> "E"
+                else -> "F"
+            }
+        }
+    }
+    return if (this < 16) {
+        toHex16(this)
+    } else {
+        val b = this / 16
+        b.toHex() + toHex16(this % 16)
+    }
 }
