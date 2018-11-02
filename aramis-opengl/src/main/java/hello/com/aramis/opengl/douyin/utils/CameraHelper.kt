@@ -12,9 +12,6 @@ import java.lang.Exception
  *Description:
  */
 class CameraHelper(var cameraID: Int) : android.hardware.Camera.PreviewCallback {
-    private val TAG = "CameraHelper"
-    var WIDTH = 640
-    var HEIGHT = 480
     private var mCamera: Camera? = null
     private lateinit var buffer: ByteArray
     var mPreviewCallback: Camera.PreviewCallback? = null
@@ -49,6 +46,9 @@ class CameraHelper(var cameraID: Int) : android.hardware.Camera.PreviewCallback 
                 //设置预览画面
                 this.setPreviewTexture(mSurfaceTexture)
                 this.startPreview()
+
+                this.autoFocus { success, camera ->  }
+
             }
 
         } catch (e: Exception) {
@@ -68,11 +68,22 @@ class CameraHelper(var cameraID: Int) : android.hardware.Camera.PreviewCallback 
         }
     }
 
+    fun autoFocus(){
+        mCamera?.autoFocus { success, camera ->  }
+    }
+
     override fun onPreviewFrame(data: ByteArray?, camera: Camera?) {
         //data数据依然是倒的
         if (mPreviewCallback != null) {
             mPreviewCallback?.onPreviewFrame(data, camera)
         }
         camera?.addCallbackBuffer(buffer)
+    }
+
+    companion object {
+//        var WIDTH = 640
+//        var HEIGHT = 480
+        var WIDTH = 1080
+        var HEIGHT = 1680
     }
 }

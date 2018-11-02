@@ -27,6 +27,7 @@ class MySurfaceView : SurfaceView, SurfaceHolder.Callback {
     private lateinit var bulletBitmap: Bitmap
     private val explodeBimaps = mutableListOf<Bitmap>()
     private lateinit var bullet: Bullet
+    private var srcBitmap:Bitmap?=null
 
     private fun init(){
         this.requestFocus()
@@ -37,8 +38,22 @@ class MySurfaceView : SurfaceView, SurfaceHolder.Callback {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         logE("onDraw bgBmp:$bgBmp")
-        canvas.drawBitmap(bgBmp, 0f, 0f, paint)
+//        canvas.drawBitmap(bgBmp, 0f, 0f, paint)
 //        bullet.drawSelf(canvas, paint)
+
+        var srcLeft = 0f
+        var srcTop = 0f
+        var times=0
+        canvas.drawColor(0xffaaddcc.toInt())
+        while (srcTop < height) {
+            times++
+            canvas.drawBitmap(srcBitmap!!, srcLeft, srcTop, paint)
+            srcLeft += srcBitmap!!.width
+            if (srcLeft > width) {
+                srcLeft = 0f
+                srcTop += srcBitmap!!.height
+            }
+        }
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
@@ -66,23 +81,23 @@ class MySurfaceView : SurfaceView, SurfaceHolder.Callback {
 
         bgBmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bgBmp)
-        val srcBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg_flaver)
-        logE("srcBitmap height:${srcBitmap.height},width:${srcBitmap.width}")
-        var srcLeft = 0f
-        var srcTop = 0f
-        var times=0
-        canvas.drawColor(0xffaaddcc.toInt())
-        while (srcTop < height) {
-            times++
-            canvas.drawBitmap(srcBitmap, srcLeft, srcTop, paint)
-            srcLeft += srcBitmap.width
-            if (srcLeft > width) {
-                srcLeft = 0f
-                srcTop += srcBitmap.height
-            }
-        }
-
-        logE("times $times")
+         srcBitmap = BitmapFactory.decodeResource(resources, R.drawable.bg_flaver)
+//        logE("srcBitmap height:${srcBitmap.height},width:${srcBitmap.width}")
+//        var srcLeft = 0f
+//        var srcTop = 0f
+//        var times=0
+//        canvas.drawColor(0xffaaddcc.toInt())
+//        while (srcTop < height) {
+//            times++
+//            canvas.drawBitmap(srcBitmap, srcLeft, srcTop, paint)
+//            srcLeft += srcBitmap.width
+//            if (srcLeft > width) {
+//                srcLeft = 0f
+//                srcTop += srcBitmap.height
+//            }
+//        }
+//
+//        logE("times $times")
     }
 
     override fun surfaceCreated(holder: SurfaceHolder?) {

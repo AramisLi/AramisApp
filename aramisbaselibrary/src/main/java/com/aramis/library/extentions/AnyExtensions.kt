@@ -95,3 +95,29 @@ fun Int.toHex(): String {
         b.toHex() + toHex16(this % 16)
     }
 }
+
+/**
+ * 十六进制转十进制
+ */
+fun String.toDecimal(): Long {
+    val hs= if (this.length>2&& this[0]=='0'&& this[1].toLowerCase()=='x') this.substring(2 until this.length) else this
+    fun getInt(s: String): Int {
+        return when (s.toUpperCase()) {
+            "A" -> 10
+            "B" -> 11
+            "C" -> 12
+            "D" -> 13
+            "E" -> 14
+            "F" -> 15
+            else -> s.toInt()
+        }
+    }
+
+    var s = 0L
+    for (index in (0 until hs.length)) {
+        val c = hs[index]
+        s += (getInt(c.toString()) * Math.pow(16.0, (hs.length - index - 1).toDouble())).toLong()
+    }
+
+    return s
+}

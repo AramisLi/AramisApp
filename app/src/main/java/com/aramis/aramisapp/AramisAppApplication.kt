@@ -14,4 +14,8 @@ class AramisAppApplication : BunnyApplication() {
         super.onCreate()
 
     }
+
+    override fun onTerminate() {
+        super.onTerminate()
+    }
 }

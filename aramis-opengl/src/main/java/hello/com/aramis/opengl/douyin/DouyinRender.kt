@@ -4,8 +4,11 @@ import android.graphics.SurfaceTexture
 import android.hardware.Camera
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
+import com.aramis.library.extentions.logE
+import hello.com.aramis.opengl.douyin.filter.CameraFilter
 import hello.com.aramis.opengl.douyin.filter.ScreenFilter
 import hello.com.aramis.opengl.douyin.utils.CameraHelper
+import org.jetbrains.anko.displayMetrics
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -14,16 +17,13 @@ import javax.microedition.khronos.opengles.GL10
  *Date:2018/10/31
  *Description:
  */
-class DouyinRender(val mView: DouyinView) : GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener {
+class DouyinRender(private val mView: DouyinView) : GLSurfaceView.Renderer, SurfaceTexture.OnFrameAvailableListener {
     private lateinit var mCameraHelper: CameraHelper
     private lateinit var mSurfaceTexture: SurfaceTexture
-    private lateinit var mtx: FloatArray
+    private val mtx: FloatArray = FloatArray(16)
     private lateinit var mScreenFilter: ScreenFilter
     private val mTextures = intArrayOf(0)
-
-    init {
-
-    }
+    private lateinit var mCameraFilter: CameraFilter
 
     //绘制方法。类似于onDraw
     override fun onDrawFrame(gl: GL10?) {
@@ -39,11 +39,19 @@ class DouyinRender(val mView: DouyinView) : GLSurfaceView.Renderer, SurfaceTextu
         //surfaceTexture比较特殊，在opengl当中使用的是特殊的采样器  (不是sampler2D)
         //获得变化矩阵
         mSurfaceTexture.getTransformMatrix(mtx)
+        mCameraFilter.setMatrix(mtx)
+        val textureId = mCameraFilter.onDrawFrame(mTextures[0])
+        mScreenFilter.onDrawFrame(textureId)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+        CameraHelper.WIDTH = mView.context.displayMetrics.widthPixels
+        CameraHelper.HEIGHT = mView.context.displayMetrics.heightPixels
+        logE("CameraHelper.WIDTH:${CameraHelper.WIDTH},CameraHelper.HEIGHT:${CameraHelper.HEIGHT}")
         //开启预览
         mCameraHelper.startPreview(mSurfaceTexture)
+        logE("width:$width,height:$height")
+        mCameraFilter.onReady(width, height)
         mScreenFilter.onReady(width, height)
     }
 
@@ -52,16 +60,22 @@ class DouyinRender(val mView: DouyinView) : GLSurfaceView.Renderer, SurfaceTextu
         mCameraHelper = CameraHelper(Camera.CameraInfo.CAMERA_FACING_BACK)
         //准备摄像头绘制的画布,通过opengl创建一个纹理id
         GLES20.glGenTextures(mTextures.size, mTextures, 0)
+//        logE("纹理id:${mTextures[0]}")
         mSurfaceTexture = SurfaceTexture(mTextures[0])
         mSurfaceTexture.setOnFrameAvailableListener(this)
 
         //必须在gl线程中创建。onSurfaceCreated在gl线程中
         mScreenFilter = ScreenFilter(mView.context)
-        mScreenFilter.onDrawFrame(mTextures[0], mtx)
+        mCameraFilter = CameraFilter(mView.context)
     }
 
     //SurfaceTexture有一个有效的新数据的时候回调-->让GLSurfaceView去绘制
     override fun onFrameAvailable(surfaceTexture: SurfaceTexture?) {
         mView.requestRender()
     }
+
+    fun onSurfaceDestroy() {
+        mCameraHelper.stopPreview()
+    }
+
 }
