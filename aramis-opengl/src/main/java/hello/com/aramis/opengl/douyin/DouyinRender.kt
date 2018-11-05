@@ -2,11 +2,14 @@ package hello.com.aramis.opengl.douyin
 
 import android.graphics.SurfaceTexture
 import android.hardware.Camera
+import android.opengl.EGL14
+import android.opengl.EGLContext
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import com.aramis.library.extentions.logE
 import hello.com.aramis.opengl.douyin.filter.CameraFilter
 import hello.com.aramis.opengl.douyin.filter.ScreenFilter
+import hello.com.aramis.opengl.douyin.record.MediaRecorder
 import hello.com.aramis.opengl.douyin.utils.CameraHelper
 import org.jetbrains.anko.displayMetrics
 import javax.microedition.khronos.egl.EGLConfig
@@ -42,6 +45,9 @@ class DouyinRender(private val mView: DouyinView) : GLSurfaceView.Renderer, Surf
         mCameraFilter.setMatrix(mtx)
         val textureId = mCameraFilter.onDrawFrame(mTextures[0])
         mScreenFilter.onDrawFrame(textureId)
+
+        //进行录制
+        mMediaRecorder.fireFrame(textureId,mSurfaceTexture.timestamp)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -55,6 +61,10 @@ class DouyinRender(private val mView: DouyinView) : GLSurfaceView.Renderer, Surf
         mScreenFilter.onReady(width, height)
     }
 
+    private lateinit var mEglContext: EGLContext
+
+    private lateinit var mMediaRecorder: MediaRecorder
+
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         //初始化
         mCameraHelper = CameraHelper(Camera.CameraInfo.CAMERA_FACING_BACK)
@@ -67,6 +77,13 @@ class DouyinRender(private val mView: DouyinView) : GLSurfaceView.Renderer, Surf
         //必须在gl线程中创建。onSurfaceCreated在gl线程中
         mScreenFilter = ScreenFilter(mView.context)
         mCameraFilter = CameraFilter(mView.context)
+
+        //渲染线程的EGL上下文
+        mEglContext = EGL14.eglGetCurrentContext()
+
+        val path="/sdcard/a.mp4"
+        //
+         mMediaRecorder = MediaRecorder(mView.context, path, CameraHelper.HEIGHT, CameraHelper.WIDTH, mEglContext)
     }
 
     //SurfaceTexture有一个有效的新数据的时候回调-->让GLSurfaceView去绘制
@@ -76,6 +93,14 @@ class DouyinRender(private val mView: DouyinView) : GLSurfaceView.Renderer, Surf
 
     fun onSurfaceDestroy() {
         mCameraHelper.stopPreview()
+    }
+
+    fun startRecord(){
+        mMediaRecorder.start()
+    }
+
+    fun stopRecord(){
+        mMediaRecorder.stop()
     }
 
 }

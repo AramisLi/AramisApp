@@ -13,10 +13,9 @@ import fcom.aramisapp.base.AraBasePresenter
 class MyTestGLESActivity : AraBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val myGLSurfaceView=GLSurfaceView(this)
-        myGLSurfaceView.setEGLContextClientVersion(2)
-        myGLSurfaceView.setRenderer(MyGLSurfaceRenderer())
+        val myGLSurfaceView = MySurfaceView(this)
         setContentView(myGLSurfaceView)
     }
+
     override fun getPresenter(): AraBasePresenter? = null
 }

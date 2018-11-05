@@ -78,6 +78,8 @@ open class AbstractFilter(val context: Context, vertexShaderId: Int, fragmentSha
         //绘制
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4)
 
+        //解绑
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0)
         return ctextureId
     }
 
