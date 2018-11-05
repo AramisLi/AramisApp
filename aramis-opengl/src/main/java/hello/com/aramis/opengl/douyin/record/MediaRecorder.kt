@@ -104,7 +104,7 @@ class MediaRecorder(val context: Context, val path: String, val width: Int, val 
                 //需要更多数据
                 MediaCodec.INFO_TRY_AGAIN_LATER -> {
                     if (!endOfStream) {
-
+                        break@loop
                     }
                 }
                 //开始编码的时候，就会调用一次

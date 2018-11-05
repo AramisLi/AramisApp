@@ -12,7 +12,7 @@ import hello.com.aramis.opengl.douyin.filter.ScreenFilter
  *
  * @param eglContext GLThread的EGL上下文
  */
-class EGLBase(val context: Context, val width: Int, val height: Int, val surface: Surface, val eglContext: EGLContext) {
+class EGLBase(val context: Context, val width: Int, val height: Int, surface: Surface, private val eglContext: EGLContext) {
 
     private lateinit var mEglDisplay: EGLDisplay
 
@@ -39,27 +39,27 @@ class EGLBase(val context: Context, val width: Int, val height: Int, val surface
         mScreenFilter.onReady(width, height)
     }
 
-    fun draw(texureId: Int, timestamp: Long) {
+    fun draw(textureId: Int, timestamp: Long) {
         //绑定当前线程的显示设备及上下文，之后操作OpenGL，就是在这个虚拟显示上操作
         if (!EGL14.eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEGLContext)) {
             throw java.lang.RuntimeException("eglMakeCurrent failed")
         }
 
-        mScreenFilter.onDrawFrame(texureId)
+        mScreenFilter.onDrawFrame(textureId)
 
         //刷新eglSurface
-        EGLExt.eglPresentationTimeANDROID(mEglDisplay,mEglSurface,timestamp)
+        EGLExt.eglPresentationTimeANDROID(mEglDisplay, mEglSurface, timestamp)
         //交换数据。
         // EGL的工作模式是双缓存,内部有两个Frame Buffer
         //当EGL将一个fb 显示到屏幕上，另一个就在后台等待opengl交换
-        EGL14.eglSwapBuffers(mEglDisplay,mEglSurface)
+        EGL14.eglSwapBuffers(mEglDisplay, mEglSurface)
     }
 
     //释放
-    fun release(){
-        EGL14.eglDestroySurface(mEglDisplay,mEglSurface)
-        EGL14.eglMakeCurrent(mEglDisplay,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_SURFACE,EGL14.EGL_NO_CONTEXT)
-        EGL14.eglDestroyContext(mEglDisplay,mEGLContext)
+    fun release() {
+        EGL14.eglDestroySurface(mEglDisplay, mEglSurface)
+        EGL14.eglMakeCurrent(mEglDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_CONTEXT)
+        EGL14.eglDestroyContext(mEglDisplay, mEGLContext)
         EGL14.eglReleaseThread()
         EGL14.eglTerminate(mEglDisplay)
     }
