@@ -37,6 +37,6 @@ class NdkShowListActivity : AraBaseActivity() {
                 "    class fcom.aramisapp.component.SimpleTextAdapter, unresolved supertypes: com.aramis.library.base.SimpleBaseAdapter\t"
     }
 
-    override fun getPresenter(): AraBasePresenter? = null
+    override fun getPresenter(): AraBasePresenter<*>? = null
 
 }

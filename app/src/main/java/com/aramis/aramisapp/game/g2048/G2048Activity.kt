@@ -27,6 +27,6 @@ class G2048Activity : AraBaseActivity() {
         setContentView(M2048View(this))
     }
 
-    override fun getPresenter(): AraBasePresenter? = null
+    override fun getPresenter(): AraBasePresenter<*>? = null
 
 }

@@ -14,7 +14,7 @@ import java.io.IOException
  *Date:2018/8/23
  *Description:
  */
-class FmodPresenter(view: FmodView) : AraBasePresenter(view) {
+class FmodPresenter(view: FmodView) : AraBasePresenter<FmodView>(view) {
     private val mediaRecorder = MediaRecorder()
     private val mediaPlayer = MediaPlayer()
     private val audioFile = File(Config.baseFilePath + File.separator + "recording.3gp")

@@ -175,6 +175,6 @@ class FileSplitActivity : AraBaseActivity() {
         }
     }
 
-    override fun getPresenter(): AraBasePresenter? = null
+    override fun getPresenter(): AraBasePresenter<*>? = null
 
 }

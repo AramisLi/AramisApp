@@ -9,7 +9,6 @@ import fcom.aramisapp.base.AraBasePresenter
 import hello.com.aramis.ndk.cmake.R
 import hello.com.aramis.ndk.cmake.ui.pv.FmodPresenter
 import hello.com.aramis.ndk.cmake.ui.pv.FmodView
-import hello.com.aramis.ndk.cmake.utils.FmodUtil
 import kotlinx.android.synthetic.main.activity_fmod.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.toast
@@ -65,7 +64,7 @@ class FmodActivity : AraBaseActivity(), FmodView {
             val path = presenter.getRecordFilePath()
             if (File(path).exists()) {
                 doAsync {
-                    FmodUtil.play(path)
+//                    FmodUtil.play(path)
                 }
 
             } else {
@@ -90,7 +89,7 @@ class FmodActivity : AraBaseActivity(), FmodView {
         }
     }
 
-    override fun getPresenter(): AraBasePresenter? = presenter
+    override fun getPresenter(): AraBasePresenter<*>? = presenter
 
     override fun onDestroy() {
         super.onDestroy()

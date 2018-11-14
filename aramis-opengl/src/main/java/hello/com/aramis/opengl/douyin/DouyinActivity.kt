@@ -25,6 +25,6 @@ class DouyinActivity : AraBaseActivity() {
 
     }
 
-    override fun getPresenter(): AraBasePresenter? = null
+    override fun getPresenter(): AraBasePresenter<*>? = null
 
 }

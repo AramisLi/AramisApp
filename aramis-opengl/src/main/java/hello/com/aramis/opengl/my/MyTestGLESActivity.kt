@@ -17,5 +17,5 @@ class MyTestGLESActivity : AraBaseActivity() {
         setContentView(myGLSurfaceView)
     }
 
-    override fun getPresenter(): AraBasePresenter? = null
+    override fun getPresenter(): AraBasePresenter<*>? = null
 }

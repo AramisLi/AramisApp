@@ -9,5 +9,5 @@ import com.aramis.library.base.BaseActivity
  */
 abstract class AraBaseActivity :BaseActivity() {
 
-    abstract override fun getPresenter(): AraBasePresenter?
+    abstract override fun getPresenter(): AraBasePresenter<*>?
 }

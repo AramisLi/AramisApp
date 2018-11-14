@@ -53,6 +53,6 @@ class SudokuActivity : AraBaseActivity() {
         sudokuControlView.stopTime()
     }
 
-    override fun getPresenter(): AraBasePresenter? = null
+    override fun getPresenter(): AraBasePresenter<*>? = null
 
 }
