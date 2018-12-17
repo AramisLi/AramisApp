@@ -13,6 +13,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                abiFilters "armeabi-v7a"
+            }
+        }
     }
     buildTypes {
         release {
@@ -33,13 +40,12 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation project(':aramis-kotlin-crawler')
-    implementation project(':aramis-ndk')
     implementation project(':aramis-this-base')
     implementation project(':aramisbaselibrary')
     implementation project(':aramis-ndk-cmake')
     implementation project(':aramis-react-native')
     implementation project(':aramis-opengl')
-    implementation project(':aramisPanda')
+    implementation project(':aramis-ffmpeg')
     implementation files('src/main/jniLibs/BaiduLBS_Android.jar')
     implementation 'com.google.android:flexbox:1.0.0'
     implementation 'ru.github.igla:ferriswheel:1.2'
@@ -48,4 +54,7 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+
+    //markdown
+    implementation 'com.github.tiagohm.MarkdownView:library:0.19.0'
 }

@@ -4,6 +4,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := hello-jni
 LOCAL_SRC_FILES := com_ndkdev_utils_NDKUtilsJ.c
 LOCAL_LDLIBS    := -lm -llog
+TARGET_ARCH_ABI := armeabi-v7a
 include $(BUILD_SHARED_LIBRARY)
 
 #include $(CLEAR_VARS)

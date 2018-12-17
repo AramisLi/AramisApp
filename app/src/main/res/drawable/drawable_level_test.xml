@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/audio"
+        android:maxLevel="4"
+        android:minLevel="0">
+
+    </item>
+    <item
+        android:drawable="@drawable/video"
+        android:maxLevel="150"
+        android:minLevel="5">
+
+    </item>
+</level-list>

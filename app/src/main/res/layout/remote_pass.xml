@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/text_remote_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我是大帅哥"
+        android:layout_marginTop="100dp"/>
+
+    <ImageView
+        android:id="@+id/image_remote_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/item_holder"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="holder" />
+
+    <Button
+        android:id="@+id/item_open_activity"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="open activity" />
+</LinearLayout>

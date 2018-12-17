@@ -10,7 +10,7 @@
 #define LOGE(FORMAT, ...) __android_log_print(ANDROID_LOG_ERROR,"Aramis",FORMAT,__VA_ARGS__);
 
 JNIEXPORT void JNICALL
-Java_hello_com_aramis_ndk_cmake_utils_FileBsdiffUtil_fileDiff(JNIEnv *env, jobject type,
+Java_hello_com_aramis_ndk_cmake_utils_FileBsdiffUtil_fileDiff(JNIEnv *env, jclass type,
                                                               jstring oldFilePath_,
                                                               jstring newFilePath_,
                                                               jstring pathFilePath_) {
@@ -33,7 +33,7 @@ Java_hello_com_aramis_ndk_cmake_utils_FileBsdiffUtil_fileDiff(JNIEnv *env, jobje
 }
 
 JNIEXPORT void JNICALL
-Java_hello_com_aramis_ndk_cmake_utils_FileBsdiffUtil_filePatch(JNIEnv *env, jobject type,
+Java_hello_com_aramis_ndk_cmake_utils_FileBsdiffUtil_filePatch(JNIEnv *env, jclass type,
                                                                jstring oldFilePath_,
                                                                jstring newFilePath_,
                                                                jstring pathFilePath_) {
@@ -51,3 +51,4 @@ Java_hello_com_aramis_ndk_cmake_utils_FileBsdiffUtil_filePatch(JNIEnv *env, jobj
     (*env)->ReleaseStringUTFChars(env, newFilePath_, newFilePath);
     (*env)->ReleaseStringUTFChars(env, pathFilePath_, pathFilePath);
 }
+

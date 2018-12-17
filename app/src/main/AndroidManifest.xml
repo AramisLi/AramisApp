@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.aramis.aramisapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -21,14 +22,20 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!--//使用步行AR导航，配置Camera权限-->
 
+    <!--自定义权限-->
+    <permission
+        android:name="ara.learn.BookProvider"
+        android:protectionLevel="normal" />
+    <uses-permission android:name="ara.learn.BookProvider" />
+
     <application
         android:name=".AramisAppApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,10 +61,122 @@
             android:name=".pendulum.ColorTestActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="ara.learn.LearnListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.activity.IPCActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.ipc.filecache.FileCacheFirstActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.ipc.filecache.FileCacheSecondActivity"
+            android:process="ara.learn.ipc.filecache.FileCacheSecondActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="ara.learn.ipc.messenger.MessengerFirstActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.ipc.IPCListActivity"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="ara.learn.ipc.messenger.MessengerService"
+            android:process=":remote" />
+        <activity
+            android:name="ara.learn.ipc.useaidl.UseAIDLActivity"
+            android:screenOrientation="portrait" />
+
+
+        <service
+            android:name="ara.learn.ipc.useaidl.UseAIDLService"
+            android:process=":remote" />
+
+        <provider
+            android:name="ara.learn.ipc.usecontentp.BookProvider"
+            android:authorities="ara.learn.ipc.usecontentp.BookProvider"
+            android:permission="ara.learn.BookProvider"
+            android:process=":provider" />
+
+        <activity
+            android:name="ara.learn.ipc.usecontentp.ContentPActivity"
+            android:screenOrientation="portrait" />
+        <!--需要权限才能启动的activity-->
+        <activity
+            android:name="ara.learn.ipc.usecontentp.ContentPSecondActivity"
+            android:permission="ara.learn.BookProvider"
+            android:process="com.uses"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="ara.learn.ipc.usecontentp.ProviderActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="ara.learn.ipc.usesocket.UseSocketActivity"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="ara.learn.ipc.usesocket.TCPServerService"
+            android:process=":remote" />
+
+        <activity
+            android:name="ara.learn.ipc.binderpool.BinderPoolActivity"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="ara.learn.ipc.binderpool.BinderPoolService"
+            android:process=":remote" />
+
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="j09UkXxNATyxbzdGEfMrEcdHCL7B7TR1" />
+
+        <activity
+            android:name="ara.learn.view.ViewTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.view.ViewListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.remoteviews.RemoteViewsActivity"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name="ara.learn.remoteviews.MyAppWidgetProvider">
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/appwidget_provider_info"/>
+            <intent-filter>
+                <action android:name="ara.learn.remoteviews.action.CLICK" />
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="ara.learn.remoteviews.RemoteAActivity"
+            android:process=":myWidget"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.remoteviews.RemoteBActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.drawable.DrawableAActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.animation.AnimationListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.animation.AnimationViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.animation.AnimationFrameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.animation.AnimationFieldActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

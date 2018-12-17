@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_room_frame"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <ImageView
+        android:id="@+id/image_zhubo_avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/image_room_frame"
+        android:layout_marginLeft="20dp" />
+
+    <TextView
+        android:id="@+id/text_zhubo_name"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@id/image_zhubo_avatar"
+        android:layout_toRightOf="@id/image_zhubo_avatar"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp" />
+
+    <TextView
+        android:id="@+id/text_room_name"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/image_zhubo_avatar"
+        android:gravity="center_vertical"
+        android:paddingLeft="15dp" />
+</RelativeLayout>

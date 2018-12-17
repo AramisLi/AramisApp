@@ -1,8 +1,8 @@
 package com.aramis.aramisapp
 
+import ara.learn.ipc.binderpool.BinderPool
 import com.aramis.library.base.BunnyApplication
-import hello.com.aramis.opengl.d2.Constant
-import org.jetbrains.anko.displayMetrics
+import org.jetbrains.anko.doAsync
 
 /**
  *Created by Aramis
@@ -12,6 +12,10 @@ import org.jetbrains.anko.displayMetrics
 class AramisAppApplication : BunnyApplication() {
     override fun onCreate() {
         super.onCreate()
+
+       doAsync {
+           BinderPool.getInstance(this@AramisAppApplication)
+       }
 
     }
 

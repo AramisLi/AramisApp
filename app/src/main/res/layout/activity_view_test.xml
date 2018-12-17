@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ara.learn.view.TestView
+        android:layout_margin="20dp"
+        android:background="#adc"
+        android:id="@+id/testView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+
+    <TextView
+        android:id="@+id/text_scroll_to"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_btn_normal"
+        android:gravity="center"
+        android:text="scrollTo"
+        android:textColor="#fff"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/text_scroll_by"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:gravity="center"
+        android:text="scrollBy"
+        android:textColor="#fff"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/text_scroll_bujian"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:gravity="center"
+        android:text="补间动画"
+        android:textColor="#fff"
+        android:textSize="15sp" />
+    <TextView
+        android:id="@+id/text_scroll_shuxing"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:gravity="center"
+        android:text="属性动画"
+        android:textColor="#fff"
+        android:textSize="15sp" />
+    <TextView
+        android:id="@+id/text_scroll_params"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:gravity="center"
+        android:text="通过改变布局参数来实现View的移动"
+        android:textColor="#fff"
+        android:textSize="15sp" />
+</LinearLayout>
