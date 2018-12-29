@@ -10,7 +10,7 @@
         android:layout_width="150dp"
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/pikaqiu" />
 
     <TextView
@@ -18,7 +18,7 @@
         android:layout_width="280dp"
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bg_btn_normal"
         android:gravity="center"
         android:text="平移"
@@ -55,5 +55,27 @@
         android:background="@drawable/bg_btn_normal"
         android:gravity="center"
         android:text="透明度"
+        android:textColor="#fff" />
+
+    <TextView
+        android:id="@+id/btn_5"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:gravity="center"
+        android:text="set"
+        android:textColor="#fff" />
+
+    <TextView
+        android:id="@+id/btn_6"
+        android:layout_width="280dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_btn_normal"
+        android:gravity="center"
+        android:text="自定义View动画"
         android:textColor="#fff" />
 </LinearLayout>

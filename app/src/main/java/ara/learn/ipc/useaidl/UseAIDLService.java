@@ -7,12 +7,14 @@ import android.os.IBinder;
 import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -66,9 +68,18 @@ public class UseAIDLService extends Service {
         mBookList.add(new Book(2, "iOS"));
 
         new Thread(new ServiceWorker()).start();
+
+
+        ArrayBlockingQueue arrayBlockingQueue = new ArrayBlockingQueue(100);
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(5, 10, 10, TimeUnit.SECONDS, arrayBlockingQueue);
+        threadPoolExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;

@@ -19,7 +19,7 @@ import org.jetbrains.anko.startActivity
  *Description:
  */
 class AnimationListActivity : AraBaseActivity() {
-    private val menuList = mutableListOf("View动画(补间动画)", "帧动画", "属性动画")
+    private val menuList = mutableListOf("View动画(补间动画)", "帧动画", "View动画的特殊使用场景", "属性动画")
     private val adapter = SimpleTextAdapter(menuList)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +31,8 @@ class AnimationListActivity : AraBaseActivity() {
             when (position) {
                 0 -> startActivity<AnimationViewActivity>()
                 1 -> startActivity<AnimationFrameActivity>()
-                2 -> startActivity<AnimationFieldActivity>()
+                2 -> startActivity<AnimationLayoutActivity>()
+                3 -> startActivity<AnimationFieldActivity>()
             }
         }
 

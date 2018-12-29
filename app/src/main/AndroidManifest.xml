@@ -28,6 +28,8 @@
         android:protectionLevel="normal" />
     <uses-permission android:name="ara.learn.BookProvider" />
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
     <application
         android:name=".AramisAppApplication"
         android:icon="@mipmap/ic_launcher"
@@ -148,7 +150,7 @@
         <receiver android:name="ara.learn.remoteviews.MyAppWidgetProvider">
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/appwidget_provider_info"/>
+                android:resource="@xml/appwidget_provider_info" />
             <intent-filter>
                 <action android:name="ara.learn.remoteviews.action.CLICK" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -176,6 +178,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name="ara.learn.animation.AnimationFieldActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.animation.AnimationLayoutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.animation.AnimationLayoutActivity2"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="ara.learn.window.WindowManagerTestActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="ara.learn.handler.TestThreadLocalActivity"
             android:screenOrientation="portrait" />
     </application>
 
